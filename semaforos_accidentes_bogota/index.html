@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<style>
+
+form {
+
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+}
+
+svg {
+
+  font: 10px sans-serif;
+
+}
+
+.cuadrolegend {
+
+   fill: none;
+
+}
+
+  
+
+.fuentelegend {
+
+   font: 15px sans-serif;
+
+}
+
+  
+
+/*rect {
+
+   fill: rgb(112,153,178);
+
+}*/
+
+  
+
+</style>
+
+
+
+<h1>Semáforos y accidentes</h1>
+
+
+
+<p>No hay relación entre la cantidad de semáforos y la cantidad de accidentes que se puedan evitar.</p>
+
+
+
+<p>Usaquén y las localidades orientales tuvieron un número similar de accidentes en 2016, a pesar de que estas últimas tienen la mayor cantidad de semáforos por área.</p>
+
+
+
+<p>Por otra parte, las 2 regiones con más accidentalidad tienen una densidad de semáforos muy similar a la de Suba.</p>
+
+
+
+<br/>
+
+
+
+<form>
+
+  <script src="https://d3js.org/d3.v4.js"></script>
+
+
+
+  <script>
+
+    var nFiltro = 7;
+
+    var sOper = "any";
+
+    
+
+    function filtrar() { 
+
+      nFiltro = 0;
+
+      
+
+      nFiltro |= (document.getElementById("ckveh").checked ? document.getElementById("ckveh").value : 0);
+
+      nFiltro |= (document.getElementById("ckpea").checked ? document.getElementById("ckpea").value : 0);
+
+      nFiltro |= (document.getElementById("ckbic").checked ? document.getElementById("ckbic").value : 0);
+
+      
+
+      d3.select("svg").selectAll("circle").remove();
+
+      d3.select("svg").selectAll("line").remove();
+
+      
+
+      sOper = document.getElementById("equalorany").checked ? "any" : "exact";
+
+      
+
+      graficar();
+
+      
+
+      console.log("filtrar nFiltro="+nFiltro);
+
+      console.log("sOper="+sOper);
+
+    }
+
+  </script>
+
+  
+
+  <label><input type="checkbox" id="ckveh" value="1" checked="checked" onchange="filtrar();"/>Vehículos&nbsp;&nbsp;</label>
+
+  <label><input type="checkbox" id="ckpea" value="2" checked="checked" onchange="filtrar();"/>Peatones&nbsp;&nbsp;</label>
+
+  <label><input type="checkbox" id="ckbic" value="4" checked="checked" onchange="filtrar();"/>Biciusuarios&nbsp;&nbsp;</label>
+
+  <br/>
+
+  <label><input type="radio" name="equalor" id="equalorany" value="any" checked="checked" onchange="filtrar();"/>Any&nbsp;&nbsp;</label>
+
+  <label><input type="radio" name="equalor" id="equalorexact" value="exact" onchange="filtrar();"/>Exact&nbsp;&nbsp;</label>
+
+  <br/>
+
+
+
+  
+
+<svg width="1300" height="600">
+
+  
+
+  <g id="NorE" transform="translate(0,14)"><rect id="localidades.NorE" width="270" height="186" fill="rgb(76, 146, 195)" horas="1758"></rect><clipPath id="clip-localidades.NorE"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#localidades.NorE"></use></clipPath><!--text clip-path="url(#clip-localidades.NorE)"><tspan x="4" y="13">NorE</tspan></text--></g>
+
+   <text><tspan x="0" y="12">NorE</tspan></text>
+
+  
+
+  <g id="NorOcc" transform="translate(0,215)"><rect id="localidades.NorOcc" width="270" height="305" fill="rgb(76, 146, 195)" horas="1758"></rect><clipPath id="clip-localidades.NorOcc"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#localidades.NorOcc"></use></clipPath><!--text clip-path="url(#clip-localidades.NorOcc)"><tspan x="4" y="13">NorOcc</tspan></text--></g>
+
+  <text><tspan x="0" y="213">NorOcc</tspan></text>
+
+
+
+  <g id="Occ" transform="translate(285,337)"><rect id="localidades.Occ" width="418" height="217" fill="rgb(76, 146, 195)" horas="1758"></rect><clipPath id="clip-localidades.Occ"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#localidades.Occ"></use></clipPath><!--text clip-path="url(#clip-localidades.Occ)"><tspan x="4" y="13">Occ</tspan></text--></g>
+
+   <text><tspan x="285" y="335">Occ</tspan></text>
+
+  
+
+  <g id="Centro1" transform="translate(285,98)"><rect id="localidades.Centro1" width="153" height="224" fill="rgb(76, 146, 195)" horas="1758"></rect><clipPath id="clip-localidades.Centro1"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#localidades.Centro1"></use></clipPath><!--text clip-path="url(#clip-localidades.Centro1)"><tspan x="4" y="13">Centro1</tspan></text--></g>
+
+   <text><tspan x="285" y="96">Centro1</tspan></text>
+
+  
+
+  <g id="Centro2" transform="translate(453,98)"><rect id="localidades.Centro2" width="250" height="224" fill="rgb(76, 146, 195)" horas="1758"></rect><clipPath id="clip-localidades.Centro2"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#localidades.Centro2"></use></clipPath><!--text clip-path="url(#clip-localidades.Centro2)"><tspan x="4" y="13">Centro2</tspan></text--></g>
+
+<text><tspan x="453" y="96">Centro2</tspan></text>
+
+
+
+  <g id="Este" transform="translate(285,14)"><rect id="localidades.Este" width="418" height="69" fill="rgb(76, 146, 195)" horas="1758"></rect><clipPath id="clip-localidades.Este"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#localidades.Este"></use></clipPath><!--text clip-path="url(#clip-localidades.Este)"><tspan x="4" y="13">Este</tspan></text--></g>
+
+<text><tspan x="285" y="12">Este</tspan></text>  
+
+  
+
+  <g id="SurOcc" transform="translate(718,358)"><rect id="localidades.SurOcc" width="380" height="217" fill="rgb(76, 146, 195)" horas="1758"></rect><clipPath id="clip-localidades.SurOcc"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#localidades.SurOcc"></use></clipPath><!--text clip-path="url(#clip-localidades.SurOcc)"><tspan x="4" y="13">SurOcc</tspan></text--></g>
+
+<text><tspan x="718" y="356">SurOcc</tspan></text>
+
+  
+
+  <g id="SurE" transform="translate(718,14)"><rect id="localidades.SurE" width="380" height="162" fill="rgb(76, 146, 195)" horas="1758"></rect><clipPath id="clip-localidades.SurE"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#localidades.SurE"></use></clipPath><!--text clip-path="url(#clip-localidades.SurE)"><tspan x="4" y="13">SurE</tspan></text--></g>
+
+<text><tspan x="718" y="12">SurE</tspan></text>
+
+  
+
+  <g id="SurC" transform="translate(718,191)"><rect id="localidades.SurC" width="380" height="152" fill="rgb(76, 146, 195)" horas="1758"></rect><clipPath id="clip-localidades.SurC"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#localidades.SurC"></use></clipPath><!--text clip-path="url(#clip-localidades.SurC)"><tspan x="4" y="13">SurC</tspan></text--></g>
+
+<text><tspan x="718" y="189">SurC</tspan></text>
+
+  
+
+<g id="gLegend" transform="translate(1120,50)">
+
+  <rect id="rectLegend" width="140" height="120" stroke="black" stroke-width="2" class="cuadrolegend"/>
+
+  <g id="sampleVehiculo" transform="translate(10,10)">
+
+    <rect id="rectVehiculo" width="75" height="25" class="cuadrolegend"/>
+
+    <text><tspan x="35" y="17" class="fuentelegend">Vehículos</tspan></text>
+
+    </g>
+
+  <g id="samplePeatonal" transform="translate(10,50)">
+
+    <rect id="rectPeatonal" width="75" height="25" class="cuadrolegend"/>
+
+    <text><tspan x="35" y="17" class="fuentelegend">Peatonal</tspan></text>
+
+  </g>
+
+  <g id="sampleBiciusuarios" transform="translate(10,90)">
+
+    <rect id="rectBiciusuarios" width="75" height="25" class="cuadrolegend"/>
+
+    <text><tspan x="35" y="17" class="fuentelegend">Biciusuarios</tspan></text>
+
+  </g>
+
+</g>
+
+
+
+  
+
+<g id="gHeatLegend" transform="translate(1120,210)">
+
+  <text><tspan x="0" y="0" class="fuentelegend">Núm Accidentes</tspan></text>
+
+</g>
+
+<g id="gHeatLegend" transform="translate(1120,220)">  
+
+  <defs>
+
+    <linearGradient id="grad1" x1="0%" y1="100%" x2="0%" y2="0%">
+
+      <stop offset="0%" style="stop-color:rgba(112,153,178,0.05)" />
+
+      <stop offset="100%" style="stop-color:rgba(112,153,178,1)" />
+
+    </linearGradient>
+
+  </defs>
+
+  <rect width="50" height="200" fill="url(#grad1)" />  
+
+  <text><tspan x="60" y="200" class="fuentelegend">1500</tspan></text>
+
+  <text><tspan x="60" y="14" class="fuentelegend">6300</tspan></text>
+
+</g>
+
+
+
+</svg>
+
+
+
+<script>
+
+var semafs = [["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",1],["Centro1",2],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",1],["Centro1",1],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",1],["Centro1",1],["Centro1",3],["Centro1",1],["Centro1",1],["Centro1",1],["Centro1",3],["Centro1",1],["Centro1",1],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",2],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",1],["Centro1",1],["Centro1",6],["Centro1",3],["Centro1",6],["Centro1",7],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",2],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",1],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",1],["Centro1",3],["Centro1",1],["Centro1",7],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",1],["Centro1",1],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",7],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",1],["Centro1",3],["Centro1",7],["Centro1",1],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",7],["Centro1",1],["Centro1",3],["Centro1",1],["Centro1",1],["Centro1",1],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",7],["Centro1",7],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",3],["Centro1",7],["Centro1",1],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",7],["Centro1",7],["Centro1",3],["Centro1",7],["Centro1",3],["Centro1",2],["Centro1",3],["Centro1",1],["Centro1",3],["Centro1",3],["Centro1",3],["Centro2",1],["Centro2",1],["Centro2",2],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",2],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",1],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",2],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",1],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",2],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",1],["Centro2",3],["Centro2",1],["Centro2",1],["Centro2",3],["Centro2",1],["Centro2",1],["Centro2",3],["Centro2",2],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",2],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",2],["Centro2",7],["Centro2",1],["Centro2",3],["Centro2",7],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",6],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",2],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",7],["Centro2",2],["Centro2",3],["Centro2",3],["Centro2",7],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",7],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",2],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",2],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",2],["Centro2",3],["Centro2",3],["Centro2",2],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",2],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",1],["Centro2",2],["Centro2",2],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",1],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",2],["Centro2",3],["Centro2",3],["Centro2",3],["Centro2",3],["Este",3],["Este",1],["Este",3],["Este",3],["Este",3],["Este",7],["Este",3],["Este",6],["Este",3],["Este",3],["Este",2],["Este",3],["Este",3],["Este",3],["Este",3],["Este",1],["Este",3],["Este",1],["Este",3],["Este",3],["Este",3],["Este",2],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",7],["Este",1],["Este",3],["Este",3],["Este",3],["Este",3],["Este",1],["Este",3],["Este",3],["Este",3],["Este",3],["Este",1],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",1],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",1],["Este",3],["Este",6],["Este",1],["Este",3],["Este",7],["Este",3],["Este",3],["Este",3],["Este",7],["Este",3],["Este",7],["Este",3],["Este",3],["Este",1],["Este",7],["Este",3],["Este",3],["Este",3],["Este",1],["Este",3],["Este",7],["Este",3],["Este",1],["Este",3],["Este",1],["Este",6],["Este",1],["Este",1],["Este",7],["Este",3],["Este",3],["Este",3],["Este",1],["Este",1],["Este",1],["Este",3],["Este",3],["Este",3],["Este",3],["Este",1],["Este",1],["Este",3],["Este",1],["Este",1],["Este",3],["Este",3],["Este",3],["Este",1],["Este",3],["Este",1],["Este",3],["Este",3],["Este",3],["Este",1],["Este",3],["Este",1],["Este",3],["Este",3],["Este",1],["Este",3],["Este",1],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",1],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",7],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",2],["Este",3],["Este",3],["Este",3],["Este",3],["Este",1],["Este",3],["Este",3],["Este",2],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",2],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",2],["Este",2],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",2],["Este",1],["Este",2],["Este",3],["Este",3],["Este",1],["Este",2],["Este",3],["Este",1],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",3],["Este",2],["Este",2],["Este",2],["Este",2],["Este",2],["Este",2],["Este",3],["NorE",3],["NorE",1],["NorE",1],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",1],["NorE",1],["NorE",1],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",1],["NorE",3],["NorE",3],["NorE",1],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",1],["NorE",1],["NorE",3],["NorE",1],["NorE",3],["NorE",3],["NorE",3],["NorE",1],["NorE",1],["NorE",1],["NorE",3],["NorE",7],["NorE",2],["NorE",3],["NorE",3],["NorE",1],["NorE",1],["NorE",1],["NorE",3],["NorE",7],["NorE",3],["NorE",1],["NorE",1],["NorE",3],["NorE",1],["NorE",3],["NorE",1],["NorE",1],["NorE",7],["NorE",1],["NorE",3],["NorE",1],["NorE",1],["NorE",7],["NorE",3],["NorE",3],["NorE",6],["NorE",7],["NorE",3],["NorE",1],["NorE",7],["NorE",1],["NorE",3],["NorE",1],["NorE",1],["NorE",1],["NorE",3],["NorE",3],["NorE",2],["NorE",1],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorE",2],["NorE",3],["NorE",3],["NorE",3],["NorE",7],["NorE",7],["NorE",7],["NorE",3],["NorE",3],["NorE",3],["NorE",3],["NorOcc",2],["NorOcc",3],["NorOcc",3],["NorOcc",1],["NorOcc",3],["NorOcc",1],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",1],["NorOcc",3],["NorOcc",1],["NorOcc",1],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",1],["NorOcc",3],["NorOcc",1],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",1],["NorOcc",3],["NorOcc",2],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",7],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",1],["NorOcc",3],["NorOcc",1],["NorOcc",3],["NorOcc",3],["NorOcc",1],["NorOcc",3],["NorOcc",1],["NorOcc",1],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",7],["NorOcc",2],["NorOcc",3],["NorOcc",2],["NorOcc",7],["NorOcc",3],["NorOcc",1],["NorOcc",1],["NorOcc",1],["NorOcc",1],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",2],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",1],["NorOcc",2],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["NorOcc",3],["Occ",1],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",1],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",1],["Occ",1],["Occ",1],["Occ",3],["Occ",3],["Occ",1],["Occ",1],["Occ",3],["Occ",3],["Occ",3],["Occ",1],["Occ",2],["Occ",1],["Occ",3],["Occ",1],["Occ",1],["Occ",3],["Occ",1],["Occ",3],["Occ",3],["Occ",3],["Occ",1],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",1],["Occ",3],["Occ",3],["Occ",2],["Occ",3],["Occ",1],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",1],["Occ",3],["Occ",3],["Occ",1],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",7],["Occ",3],["Occ",3],["Occ",7],["Occ",3],["Occ",3],["Occ",3],["Occ",2],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",2],["Occ",2],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",1],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",2],["Occ",1],["Occ",7],["Occ",3],["Occ",3],["Occ",1],["Occ",3],["Occ",2],["Occ",3],["Occ",1],["Occ",1],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",1],["Occ",3],["Occ",1],["Occ",2],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",1],["Occ",3],["Occ",3],["Occ",1],["Occ",3],["Occ",1],["Occ",1],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",1],["Occ",3],["Occ",1],["Occ",3],["Occ",3],["Occ",3],["Occ",7],["Occ",3],["Occ",7],["Occ",3],["Occ",5],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",3],["Occ",2],["Occ",3],["SurC",3],["SurC",2],["SurC",3],["SurC",3],["SurC",2],["SurC",1],["SurC",3],["SurC",1],["SurC",3],["SurC",3],["SurC",3],["SurC",3],["SurC",3],["SurC",2],["SurC",3],["SurC",3],["SurC",2],["SurC",3],["SurC",1],["SurC",2],["SurC",3],["SurC",1],["SurC",1],["SurC",3],["SurC",3],["SurC",3],["SurC",3],["SurC",3],["SurC",1],["SurC",3],["SurC",1],["SurC",3],["SurC",3],["SurC",1],["SurC",3],["SurC",3],["SurC",1],["SurC",1],["SurC",3],["SurC",1],["SurC",1],["SurC",1],["SurC",3],["SurC",3],["SurC",1],["SurC",3],["SurC",1],["SurC",3],["SurC",3],["SurC",3],["SurC",3],["SurC",3],["SurC",3],["SurC",2],["SurC",2],["SurC",3],["SurC",3],["SurC",2],["SurC",3],["SurC",3],["SurE",3],["SurE",3],["SurE",3],["SurE",1],["SurE",1],["SurE",3],["SurE",3],["SurE",3],["SurE",3],["SurE",1],["SurE",3],["SurE",3],["SurE",2],["SurE",1],["SurE",3],["SurE",3],["SurE",3],["SurE",1],["SurE",3],["SurE",3],["SurE",3],["SurE",3],["SurE",3],["SurE",3],["SurE",3],["SurE",2],["SurE",3],["SurE",3],["SurE",3],["SurE",3],["SurE",3],["SurE",2],["SurE",1],["SurE",3],["SurE",1],["SurE",2],["SurE",3],["SurE",3],["SurE",3],["SurE",3],["SurE",1],["SurE",2],["SurE",1],["SurE",1],["SurE",1],["SurE",3],["SurE",3],["SurE",3],["SurE",2],["SurOcc",1],["SurOcc",2],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",1],["SurOcc",1],["SurOcc",1],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",2],["SurOcc",2],["SurOcc",3],["SurOcc",1],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",2],["SurOcc",3],["SurOcc",3],["SurOcc",1],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",6],["SurOcc",3],["SurOcc",1],["SurOcc",3],["SurOcc",3],["SurOcc",7],["SurOcc",3],["SurOcc",6],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",2],["SurOcc",1],["SurOcc",3],["SurOcc",1],["SurOcc",3],["SurOcc",3],["SurOcc",1],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",2],["SurOcc",1],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",1],["SurOcc",3],["SurOcc",3],["SurOcc",7],["SurOcc",3],["SurOcc",7],["SurOcc",3],["SurOcc",1],["SurOcc",7],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",2],["SurOcc",3],["SurOcc",1],["SurOcc",3],["SurOcc",2],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",2],["SurOcc",1],["SurOcc",3],["SurOcc",1],["SurOcc",1],["SurOcc",2],["SurOcc",3],["SurOcc",1],["SurOcc",1],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",2],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",2],["SurOcc",3],["SurOcc",2],["SurOcc",2],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",7],["SurOcc",7],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",6],["SurOcc",7],["SurOcc",7],["SurOcc",7],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3],["SurOcc",3]];  
+
+var puntos_tamano = 3;
+
+var circStrRate = 0.5;
+
+var lenLineaRate = 0.7;
+
+var chartsvg = d3.select("svg")
+
+;
+
+  
+
+  
+
+function dib_punto(pos_x_frac, pos_y_frac, flags, chart, tamano, legendexcep) {
+
+  
+
+  //console.log("flags="+flags+",nFiltro="+nFiltro+",result="+(flags & nFiltro));
+
+  
+
+  if (!legendexcep) {
+
+    if (sOper == "any" && (flags & nFiltro) <= 0) return;
+
+    if (sOper == "exact" && flags != nFiltro) return;
+
+  }
+
+  
+
+  var esVehiculo     = (flags & 1) > 0;
+
+  var esPeatonal     = (flags & 2) > 0;
+
+  var esBiciusuarios = (flags & 4) > 0;
+
+  
+
+  var cuadro = chart.select("rect");
+
+  //console.log("LARGO ANCHO:" + cuadro.attr("width") + " " + cuadro.attr("height"));
+
+  
+
+  var pos_x = tamano + (cuadro.attr("width") - tamano*2)*pos_x_frac;
+
+  var pos_y = tamano + (cuadro.attr("height") - tamano*2)*pos_y_frac;
+
+  chart.append("circle")
+
+  .attr("cx", pos_x)
+
+  .attr("cy", pos_y)
+
+  .attr("r", tamano)
+
+  .attr("stroke-width", tamano * circStrRate)
+
+  .attr("fill", esVehiculo ? "green" : "transparent")
+
+  .attr("stroke", esPeatonal ? "black" : "transparent")
+
+  ;
+
+  if (esBiciusuarios) {
+
+    chart.append("line")
+
+    .attr("x1", pos_x - (tamano * lenLineaRate))
+
+    .attr("y1", pos_y)
+
+    .attr("x2", pos_x + (tamano * lenLineaRate))
+
+    .attr("y2", pos_y)
+
+    .attr("stroke", "red")
+
+    .attr("stroke-width", Math.floor(tamano * circStrRate))
+
+    ;    
+
+  }
+
+}  
+
+   
+
+//dib_punto(0.05, 0.025, 7, d3.select("#NorE"));
+
+var tamanoLegend = 12;  
+
+function graficar() {
+
+dib_punto(0.05, 0.025, 1, d3.select("#sampleVehiculo"), tamanoLegend, true);
+
+dib_punto(0.05, 0.025, 2, d3.select("#samplePeatonal"), tamanoLegend, true);
+
+dib_punto(0.05, 0.025, 4, d3.select("#sampleBiciusuarios"), tamanoLegend, true);
+
+for (var i = 0; i < semafs.length; i++) {
+
+  dib_punto(Math.random(), Math.random(), semafs[i][1], d3.select("#" + semafs[i][0]), puntos_tamano, false);
+
+}
+
+}
+
+graficar();
+
+d3.json("listaregiones.json", function(error, data) {
+
+  if (error) throw error;
+
+  
+
+  //console.log("QUERY: "+ data.children);
+
+  
+
+  data.children.forEach(function(d){
+
+    d3.select("#" + d.name)
+
+      .select("rect")
+
+      .attr("fill","rgba(112,153,178," + (d.accidentes + 0.05) +")");
+
+//rgba(255,127,39    
+
+    
+
+    //console.log("rgba(255,127,39," + d.accidentes +")");
+
+     d3.select("#" + d.name)
+
+       .append("title")
+
+       .text(d.name + ": " + d.locnom + "\n" + d.size + " km²\n" + d.semaforos + " semáforos\n" + d.numacc + " accidentes");
+
+  });  
+
+  
+
+  
+
+  
+
+  
+
+}); 
+
+  
+
+</script>
+
+</form>
+
+
+
+<li>En cada intersección pueden haber semáforos para 1 o varios tipos de usuarios: vehículos, peatones y/o biciusuarios.</li>
+
+<li>Las áreas de las regiones de la ciudad están a escala, para poder apreciar la densidad de semáforos en cada región. (Distribución aleatoria, no ha sido empleada información de longitud y latitud)</li>
+
+<li>La intensidad de color en cada región refleja el número de accidentes en 2016.</li>
+
+
+
+<p>(Fuentes de datos: <a href="https://www.datos.gov.co/Transporte/Semaforizaci-n-en-Bogota/ygqr-578p">Semáforos</a>, <a href="https://www.datos.gov.co/Transporte/2016-ACCIDENTES-DE-TR-NSITO-BOGOT-/79fi-zm8c">Accidentes 2016</a>. Static code extracted from <a href='http://bl.ocks.org/mbostock/'>mbostock</a>'s block: <a href='http://bl.ocks.org/mbostock/4063582'>Treemap</a>)</p>
+
