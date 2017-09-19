@@ -1,27 +1,14 @@
 {
-
  "name": "localidades",
-
  "children": [
-
       {"name": "NorE", "size": 38.07, "semaforos": 97, "accidentes": 0.424, "numacc": 3538, "locnom": "Usaquén"},
-
       {"name": "NorOcc", "size": 62.71, "semaforos": 111, "accidentes": 0.382, "numacc": 3336, "locnom": "Suba"},
-
       {"name": "Occ", "size": 69.15, "semaforos": 165, "accidentes": 1.000, "numacc": 6280, "locnom": "Fontibón, Engativá"},
-
       {"name": "Centro1", "size": 26.09, "semaforos": 218, "accidentes": 0.451, "numacc": 3663, "locnom": "Barrios Unidos, Teusaquillo"},
-
       {"name": "Este", "size": 22.19, "semaforos": 260, "accidentes": 0.429, "numacc": 3559, "locnom": "Chapinero, Santa Fe, La Candelaria"},
-
       {"name": "SurOcc", "size": 62.53, "semaforos": 145, "accidentes": 0.843, "numacc": 5533, "locnom": "Kennedy, Bosa"},
-
       {"name": "Centro2", "size": 42.58, "semaforos": 251, "accidentes": 0.770, "numacc": 5184, "locnom": "Los Mártires, Puente Aranda, Antonio Nariño, Rafael Uribe"},
-
       {"name": "SurE", "size": 46.77, "semaforos": 49, "accidentes": 0.000, "numacc": 1517, "locnom": "San Cristóbal, Usme"},
-
       {"name": "SurC", "size": 43.78, "semaforos": 60, "accidentes": 0.169, "numacc": 2321, "locnom": "Tunjuelito, Ciudad Bolívar"}
-
  ]
-
 }
