@@ -25,9 +25,9 @@ text.active {
 
 <aside>
 <p>Ordenar: <select id="order">
-  <option value="name">por Nombre</option>
   <option value="count">por Cantidad</option>
   <option value="group">por Facultad</option>
+  <option value="name">por Nombre</option>
 </select>
 
 </aside>
@@ -142,7 +142,6 @@ d3.json("miserables.json", function(miserables) {
   }
 
   d3.select("#order").on("change", function() {
-    clearTimeout(timeout);
     order(this.value);
   });
 
@@ -163,10 +162,6 @@ d3.json("miserables.json", function(miserables) {
         .attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(-90)"; });
   }
 
-  var timeout = setTimeout(function() {
-    order("group");
-    d3.select("#order").property("selectedIndex", 2).node().focus();
-  }, 5000);
 });
 
 </script>
