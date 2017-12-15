@@ -17,15 +17,15 @@
     var sFiltro = "";
     var sOper = "any";
     
-    function filtrar() { 
+    function filtrar(fileName) { 
       //console.log("FUNC filtrar");
       
       sFiltro = document.getElementById("inputfilter").value.toUpperCase();
       document.getElementById("inputfilter").value = sFiltro;
       
-      d3.select("svg").selectAll(".city").remove();
-      d3.select("svg").selectAll("line").remove();
-      d3.select("svg").selectAll("text").remove();
+      d3.select("#" + fileName).selectAll(".city").remove();
+      d3.select("#" + fileName).selectAll("line").remove();
+      d3.select("#" + fileName).selectAll("text").remove();
       
       graficar();
       
@@ -34,20 +34,23 @@
   </script>  
   
 <label style="float: left; font-weight: bold;">B&uacute;squeda: <input type="text" id="inputfilter" onkeyup="filtrar();"/></label> 
-<svg width="960" height="500" style="float: left; clear: left;"></svg>
+<svg id="disc201720" width="960" height="500" style="float: left; clear: left;"></svg>
+<svg id="ADMI" width="960" height="500" style="float: left; clear: left;"></svg>
+<svg id="ISIS" width="960" height="500" style="float: left; clear: left;"></svg>
   
 <script src="//d3js.org/d3.v4.min.js"></script>
 <script>
+
   
-var svg = d3.select("svg"),
+function graficar(fileName) {
+  
+var svg = d3.select("#" + fileName),
     margin = {top: 20, right: 120, bottom: 30, left: 50},
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   
 var parseTime = d3.timeParse("%Y%m%d%H%M");
-  
-function graficar() {
   
 var x = d3.scaleTime().range([0, width]),
     y = d3.scaleLinear().range([height, 0]),
@@ -58,7 +61,7 @@ var line = d3.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.temperature); });
   
-d3.tsv("disc201720.tsv", type, function(error, data) {
+d3.tsv(fileName + ".tsv", type, function(error, data) {
   if (error) throw error;
   var cities = data.columns.slice(1).map(function(id) {
     return {
@@ -133,7 +136,10 @@ function type(d, _, columns) {
   for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
   return d;
 }
-  
-graficar();
+
+graficar("disc201720");  
+graficar("ADMI");
+graficar("ISIS");
+
 </script>
 </form>
