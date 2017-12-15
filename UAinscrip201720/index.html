@@ -34,20 +34,23 @@
   </script>  
   
 <label style="float: left; font-weight: bold;">B&uacute;squeda: <input type="text" id="inputfilter" onkeyup="filtrar();"/></label> 
-<svg width="960" height="500" style="float: left; clear: left;"></svg>
+<svg id="disc201720.tsv" width="960" height="500" style="float: left; clear: left;"></svg>
+<svg id="ADMI.tsv" width="960" height="500" style="float: left; clear: left;"></svg>
+<svg id="ISIS.tsv" width="960" height="500" style="float: left; clear: left;"></svg>
   
 <script src="//d3js.org/d3.v4.min.js"></script>
 <script>
+
   
-var svg = d3.select("svg"),
+function graficar(fileName) {
+  
+var svg = d3.select("#" + fileName),
     margin = {top: 20, right: 120, bottom: 30, left: 50},
     width = svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   
 var parseTime = d3.timeParse("%Y%m%d%H%M");
-  
-function graficar(fileName) {
   
 var x = d3.scaleTime().range([0, width]),
     y = d3.scaleLinear().range([height, 0]),
