@@ -47,7 +47,7 @@ var svg = d3.select("svg"),
   
 var parseTime = d3.timeParse("%Y%m%d%H%M");
   
-function graficar() {
+function graficar(fileName) {
   
 var x = d3.scaleTime().range([0, width]),
     y = d3.scaleLinear().range([height, 0]),
@@ -58,7 +58,7 @@ var line = d3.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.temperature); });
   
-d3.tsv("ADMI.tsv", type, function(error, data) {
+d3.tsv(fileName, type, function(error, data) {
   if (error) throw error;
   var cities = data.columns.slice(1).map(function(id) {
     return {
@@ -133,7 +133,10 @@ function type(d, _, columns) {
   for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
   return d;
 }
-  
-graficar();
+
+graficar("disc201720.tsv");  
+graficar("ADMI.tsv");
+graficar("ISIS.tsv");
+
 </script>
 </form>
