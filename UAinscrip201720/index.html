@@ -34,9 +34,9 @@
   </script>  
   
 <label style="float: left; font-weight: bold;">B&uacute;squeda: <input type="text" id="inputfilter" onkeyup="filtrar();"/></label> 
-<svg id="disc201720.tsv" width="960" height="500" style="float: left; clear: left;"></svg>
-<svg id="ADMI.tsv" width="960" height="500" style="float: left; clear: left;"></svg>
-<svg id="ISIS.tsv" width="960" height="500" style="float: left; clear: left;"></svg>
+<svg id="disc201720" width="960" height="500" style="float: left; clear: left;"></svg>
+<svg id="ADMI" width="960" height="500" style="float: left; clear: left;"></svg>
+<svg id="ISIS" width="960" height="500" style="float: left; clear: left;"></svg>
   
 <script src="//d3js.org/d3.v4.min.js"></script>
 <script>
@@ -61,7 +61,7 @@ var line = d3.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.temperature); });
   
-d3.tsv(fileName, type, function(error, data) {
+d3.tsv(fileName + ".tsv", type, function(error, data) {
   if (error) throw error;
   var cities = data.columns.slice(1).map(function(id) {
     return {
@@ -137,9 +137,9 @@ function type(d, _, columns) {
   return d;
 }
 
-graficar("disc201720.tsv");  
-graficar("ADMI.tsv");
-graficar("ISIS.tsv");
+graficar("disc201720");  
+graficar("ADMI");
+graficar("ISIS");
 
 </script>
 </form>
