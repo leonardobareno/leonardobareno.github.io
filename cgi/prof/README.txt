@@ -1,5 +1,5 @@
 Copied from:
-https://www.cs.unm.edu/~angel/BOOK/INTERACTIVE_COMPUTER_GRAPHICS/SEVENTH_EDITION/CODE/
+https://www.cs.unm.edu/~angel/BOOK/INTERACTIVE_COMPUTER_GRAPHICS/SEVENTH_EDITION/CODE/10/
 https://github.com/esangel/WebGL/tree/master/Chap10
 
 Chapter 10 Programs:
