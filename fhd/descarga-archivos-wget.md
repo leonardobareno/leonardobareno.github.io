@@ -27,7 +27,7 @@ original: applied-archival-downloading-with-wget
 redirect_from: /es/lessons/applied-archival-downloading-with-wget
 ---
 
-{% include toc.html %}
+{ % include toc.html % }
 
 
 
@@ -214,9 +214,9 @@ bordo del HMS *Bounty*. [En la página del visor][] observarás que hay
 131 'ítems' (páginas) en el cuaderno. Esto es algo engañoso. Haz clic
 en la primera imagen en miniatura en la parte superior derecha para ver
 la página entera. Ahora haz *clic derecho -\> ver imagen*. La URL debe
-ser 'http://nla.gov.au/nla.ms-ms5393-1-s1-v.jpg'. Si navegas a través
+ser '<http://nla.gov.au/nla.ms-ms5393-1-s1-v.jpg>'. Si navegas a través
 de las miniaturas, la última es 'Part 127', que está ubicada en
-'http://nla.gov.au/nla.ms-ms5393-1-s127-v.jpg'. La discrepancia entre
+'<http://nla.gov.au/nla.ms-ms5393-1-s127-v.jpg>'. La discrepancia entre
 el rango de las URLs y el número total de archivos significa que has
 omitido una o dos páginas en la descarga automática - en este caso hay
 unas pocas URLs que incluyen una letra en el nombre del .jpeg
@@ -343,12 +343,12 @@ australianos, para obtener la URL simplificada debes hacer *clic derecho
 -\> ver imagen* usando el navegador web. La URL del primer cartel debe
 ser:
 
-http://cushing.med.yale.edu/images/mdposter/full/poster0001.jpg
+<http://cushing.med.yale.edu/images/mdposter/full/poster0001.jpg>
 
 Siguiendo los mismos pasos para el último cartel en la galería, la URL
 debería ser:
 
-http://cushing.med.yale.edu/images/mdposter/full/poster0637.jpg.
+<http://cushing.med.yale.edu/images/mdposter/full/poster0637.jpg>
 
 El script que utilizamos para descargar desde LAC no funcionará porque
 la función de rango no puede manejar ceros a la izquierda. El script
