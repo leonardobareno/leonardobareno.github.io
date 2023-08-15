@@ -1,0 +1,88 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #ffffff;
+}
+
+.body_p1,.form-signin {
+  width: 100%;
+  max-width: 800px;
+  padding: 15px;
+  margin: auto;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.card-header-L2 {
+    margin-bottom: 0;
+	text-align: left;
+}
+.card-header-L2:first-child {
+    border-radius: calc(.25rem - 1px) calc(.25rem - 1px) 0 0;	
+}
+.card-body_L2 {
+    flex: 1 1 auto;
+    min-height: 1px;
+	text-align: left;
+   padding: 0 3.5rem;
+}
+.btn-link_L2 {
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;	
+	padding: 0 1.25rem 0;
+	text-align: left;
+}
+.card_L2 {
+    position: relative;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border-radius: .25rem;	
+}
+.btn {
+	border-bottom: 0;
+}
+.btn-link {
+	font-weight: bold;
+	font-size: 1.25rem;
+}
+.info_line {
+	line-height: 1.3;
+    font-size: 1rem;
+    font-weight: normal;
+	padding: 0 1.25rem 0;
+}
