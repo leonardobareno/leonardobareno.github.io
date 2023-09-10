@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8">
+	<title>Bomberman NES Password Generator</title>
+	
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	
+	<script src="assets/js/jquery.slim.min.js"></script>
+	<script src="assets/js/popper.min.js"></script>
+	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	
+	<script type="text/javascript">
+const cypher = [
+{symbol: 'A', number: 0},
+{symbol: 'B', number: 9},
+{symbol: 'C', number: 4},
+{symbol: 'D', number: 13},
+{symbol: 'E', number: 7},
+{symbol: 'F', number: 2},
+{symbol: 'G', number: 6},
+{symbol: 'H', number: 10},
+{symbol: 'I', number: 15},
+{symbol: 'J', number: 12},
+{symbol: 'K', number: 3},
+{symbol: 'L', number: 8},
+{symbol: 'M', number: 11},
+{symbol: 'N', number: 14},
+{symbol: 'O', number: 1},
+{symbol: 'P', number: 5}
+];
+
+function decrypt() {
+	var password = document.getElementById('eb_password').value;
+	
+	if (!/^([A-P]{20})$/.test(password)) {
+		alert("Not valid characters for password (from A to P, length: 20)")
+		return;
+	}
+	
+	var numbers = [];
+	numbers[0] = 0;
+	var nibbles =[];
+	nibbles[0] = 0;
+	
+	for (let i1 = 1; i1 < 21; i1++) {
+		numbers[i1] = cypher.find(inst => inst.symbol === password.substr(i1-1,1)).number;
+		nibbles[i1] = (numbers[i1-1] + numbers[i1] + 7) % 16;
+	}
+	
+	var score = (nibbles[1] + nibbles[6]*10 + nibbles[16]*100 + nibbles[8]*1000 + nibbles[12]*10000 + nibbles[14]*100000 + nibbles[4]*1000000) * 100;
+	
+	var flagDetonator = nibbles[2];
+	var fireRange_nc = nibbles[7];
+	var flagFlammeImmunity = nibbles[9];
+	var bombsNumber_c = nibbles[11];
+	var flagSpeedUp = nibbles[13];
+	var flagRevealTargets = nibbles[17];
+	var flagWallWalking = nibbles[19];
+	var stage_nc = nibbles[3] + nibbles[18]*16;
+	
+	document.getElementById('eb_score').value 				= score;
+	document.getElementById('sel_flagDetonator').value 		= flagDetonator;
+	document.getElementById('sel_fireRange_nc').value 		= fireRange_nc;
+	document.getElementById('sel_flagFlammeImmunity').value 	= flagFlammeImmunity;
+	document.getElementById('sel_bombsNumber_c').value 		= bombsNumber_c;
+	document.getElementById('sel_flagSpeedUp').value 		= flagSpeedUp;
+	document.getElementById('sel_flagRevealTargets').value 	= flagRevealTargets;
+	document.getElementById('sel_flagWallWalking').value 	= flagWallWalking;
+	document.getElementById('sel_stage_nc').value 			= stage_nc;
+}
+
+function encrypt() {
+	var score = 				document.getElementById('eb_score').value;
+	var flagDetonator = 		document.getElementById('sel_flagDetonator').value;
+	var fireRange_nc = 			document.getElementById('sel_fireRange_nc').value;
+	var flagFlammeImmunity = 	document.getElementById('sel_flagFlammeImmunity').value;
+	var bombsNumber_c = 		document.getElementById('sel_bombsNumber_c').value;
+	var flagSpeedUp = 			document.getElementById('sel_flagSpeedUp').value;
+	var flagRevealTargets = 	document.getElementById('sel_flagRevealTargets').value;
+	var flagWallWalking = 		document.getElementById('sel_flagWallWalking').value;
+	var stage_nc = 				document.getElementById('sel_stage_nc').value;
+	
+	if (!/^([0-9]{0,9})$/.test(score)) {
+		alert("Not valid characters for score (from 0 to 9, max length: 9 digits)")
+		return;
+	}
+	
+	var score_100 = Math.floor(score/100);
+	score = score_100 * 100;
+	document.getElementById('eb_score').value = score;
+	
+	var nibbles =[];
+	nibbles[0] = 0;
+	var numbers = [];
+	numbers[0] = 0;
+	var password = "";
+	
+	nibbles[1] = (score_100) % 10;
+	nibbles[2] = Number(flagDetonator);
+	nibbles[3] = stage_nc % 16;
+	nibbles[4] = Math.floor(score_100/1000000)%10;
+	nibbles[5] = (nibbles[1] + nibbles[2] + nibbles[3] + nibbles[4]) % 16;
+	nibbles[6] = Math.floor(score_100/10)%10;
+	nibbles[7] = Number(fireRange_nc);
+	nibbles[8] = Math.floor(score_100/1000)%10;
+	nibbles[9] = Number(flagFlammeImmunity);
+	nibbles[10] = (nibbles[6] + nibbles[7] + nibbles[8] + nibbles[9]) % 16;
+	nibbles[11] = Number(bombsNumber_c);
+	nibbles[12] = Math.floor(score_100/10000)%10;
+	nibbles[13] = Number(flagSpeedUp);
+	nibbles[14] = Math.floor(score_100/100000)%10;
+	nibbles[15] = (nibbles[11] + nibbles[12] + nibbles[13] + nibbles[14]) % 16;;
+	nibbles[16] = Math.floor(score_100/100)%10;
+	nibbles[17] = Number(flagRevealTargets);
+	nibbles[18] = Math.floor(stage_nc/16);
+	nibbles[19] = Number(flagWallWalking);
+	nibbles[20] = ((nibbles[16] + nibbles[17] + nibbles[18] + nibbles[19]) + 2*(nibbles[5] + nibbles[10] + nibbles[15])) % 16;
+
+	for (let i2 = 1; i2 < 21; i2++) {
+		numbers[i2] = (nibbles[i2] - (numbers[i2-1]+7) + 32) % 16;
+		password += cypher.find(inst => inst.number === numbers[i2]).symbol;
+	}
+	
+	document.getElementById('eb_password').value = password;
+	
+}
+
+	</script>
+</head>
+<body>
+<div class="container">		
+  <div class="row justify-content-start">
+    <div class="col-2" style="-ms-flex: 0 0 80px; flex: 0 0 80px;">
+		<img id="logo" src="assets/img/img.png" style="width: 80px;"/>
+    </div>
+    <div class="col-4">
+		<h1 class="h3 mb-3 font-weight-normal" style="margin-bottom: 0;">Bomberman NES Password Generator</h1>
+    </div>	
+  </div>
+</div>
+
+<div class="container">
+	<div class="col-sm-6">
+  
+		<div class="form-group">
+			<div>&nbsp;</div>
+		</div>   
+
+		<div class="form-group">
+			<div>Password</div>
+			<input type="text" id="eb_password" style="width: 25em;"/>
+		</div>
+		<div class="form-group">
+			<button id="ejec" onclick="decrypt();" class="btn btn-primary"/>&#8681; Decrypt</button>
+		</div>
+		<div class="form-group">
+			<button id="ejec" onclick="encrypt();" class="btn btn-primary"/>&#8679; Encrypt</button>
+		</div>
+		<div class="form-group">
+			<div>Stage</div>
+			<select name="sel_stage_nc" id="sel_stage_nc">
+				<option value = "">(Select one)</option>
+				<option value = "0">Stage 0 (NE)</option>
+				<option value = "1">Stage 1</option>
+				<option value = "2">Stage 2</option>
+				<option value = "3">Stage 3</option>
+				<option value = "4">Stage 4</option>
+				<option value = "5">Stage 5</option>
+				<option value = "6">Stage 6</option>
+				<option value = "7">Stage 7</option>
+				<option value = "8">Stage 8</option>
+				<option value = "9">Stage 9</option>
+				<option value = "10">Stage 10</option>
+				<option value = "11">Stage 11</option>
+				<option value = "12">Stage 12</option>
+				<option value = "13">Stage 13</option>
+				<option value = "14">Stage 14</option>
+				<option value = "15">Stage 15</option>
+				<option value = "16">Stage 16</option>
+				<option value = "17">Stage 17</option>
+				<option value = "18">Stage 18</option>
+				<option value = "19">Stage 19</option>
+				<option value = "20">Stage 20</option>
+				<option value = "21">Stage 21</option>
+				<option value = "22">Stage 22</option>
+				<option value = "23">Stage 23</option>
+				<option value = "24">Stage 24</option>
+				<option value = "25">Stage 25</option>
+				<option value = "26">Stage 26</option>
+				<option value = "27">Stage 27</option>
+				<option value = "28">Stage 28</option>
+				<option value = "29">Stage 29</option>
+				<option value = "30">Stage 30</option>
+				<option value = "31">Stage 31</option>
+				<option value = "32">Stage 32</option>
+				<option value = "33">Stage 33</option>
+				<option value = "34">Stage 34</option>
+				<option value = "35">Stage 35</option>
+				<option value = "36">Stage 36</option>
+				<option value = "37">Stage 37</option>
+				<option value = "38">Stage 38</option>
+				<option value = "39">Stage 39</option>
+				<option value = "40">Stage 40</option>
+				<option value = "41">Stage 41</option>
+				<option value = "42">Stage 42</option>
+				<option value = "43">Stage 43</option>
+				<option value = "44">Stage 44</option>
+				<option value = "45">Stage 45</option>
+				<option value = "46">Stage 46</option>
+				<option value = "47">Stage 47</option>
+				<option value = "48">Stage 48</option>
+				<option value = "49">Stage 49</option>
+				<option value = "50">Stage 50</option>
+				<option value = "51">Stage 51 (NE)</option>
+				<option value = "52">Stage 52 (NE)</option>
+				<option value = "53">Stage 53 (NE)</option>
+				<option value = "54">Stage 54 (NE)</option>
+				<option value = "55">Stage 55 (NE)</option>
+				<option value = "56">Stage 56 (NE)</option>
+				<option value = "57">Stage 57 (NE)</option>
+				<option value = "58">Stage 58 (NE)</option>
+				<option value = "59">Stage 59 (NE)</option>
+				<option value = "60">Stage 60 (NE)</option>
+				<option value = "61">Stage 61 (NE)</option>
+				<option value = "62">Stage 62 (NE)</option>
+				<option value = "63">Stage 63 (NE)</option>
+				<option value = "64">Stage 64 (NE)</option>
+				<option value = "65">Stage 65 (NE)</option>
+				<option value = "66">Stage 66 (NE)</option>
+				<option value = "67">Stage 67 (NE)</option>
+				<option value = "68">Stage 68 (NE)</option>
+				<option value = "69">Stage 69 (NE)</option>
+				<option value = "70">Stage 70 (NE)</option>
+				<option value = "71">Stage 71 (NE)</option>
+				<option value = "72">Stage 72 (NE)</option>
+				<option value = "73">Stage 73 (NE)</option>
+				<option value = "74">Stage 74 (NE)</option>
+				<option value = "75">Stage 75 (NE)</option>
+				<option value = "76">Stage 76 (NE)</option>
+				<option value = "77">Stage 77 (NE)</option>
+				<option value = "78">Stage 78 (NE)</option>
+				<option value = "79">Stage 79 (NE)</option>
+				<option value = "80">Stage 80 (NE)</option>
+				<option value = "81">Stage 81 (NE)</option>
+				<option value = "82">Stage 82 (NE)</option>
+				<option value = "83">Stage 83 (NE)</option>
+				<option value = "84">Stage 84 (NE)</option>
+				<option value = "85">Stage 85 (NE)</option>
+				<option value = "86">Stage 86 (NE)</option>
+				<option value = "87">Stage 87 (NE)</option>
+				<option value = "88">Stage 88 (NE)</option>
+				<option value = "89">Stage 89 (NE)</option>
+				<option value = "90">Stage 90 (NE)</option>
+				<option value = "91">Stage 91 (NE)</option>
+				<option value = "92">Stage 92 (NE)</option>
+				<option value = "93">Stage 93 (NE)</option>
+				<option value = "94">Stage 94 (NE)</option>
+				<option value = "95">Stage 95 (NE)</option>
+				<option value = "96">Stage 96 (NE)</option>
+				<option value = "97">Stage 97 (NE)</option>
+				<option value = "98">Stage 98 (NE)</option>
+				<option value = "99">Stage 99 (NE)</option>
+				<option value = "100">Stage 100 (NE)</option>
+				<option value = "101">Stage 101 (NE)</option>
+				<option value = "102">Stage 102 (NE)</option>
+				<option value = "103">Stage 103 (NE)</option>
+				<option value = "104">Stage 104 (NE)</option>
+				<option value = "105">Stage 105 (NE)</option>
+				<option value = "106">Stage 106 (NE)</option>
+				<option value = "107">Stage 107 (NE)</option>
+				<option value = "108">Stage 108 (NE)</option>
+				<option value = "109">Stage 109 (NE)</option>
+				<option value = "110">Stage 110 (NE)</option>
+				<option value = "111">Stage 111 (NE)</option>
+				<option value = "112">Stage 112 (NE)</option>
+				<option value = "113">Stage 113 (NE)</option>
+				<option value = "114">Stage 114 (NE)</option>
+				<option value = "115">Stage 115 (NE)</option>
+				<option value = "116">Stage 116 (NE)</option>
+				<option value = "117">Stage 117 (NE)</option>
+				<option value = "118">Stage 118 (NE)</option>
+				<option value = "119">Stage 119 (NE)</option>
+				<option value = "120">Stage 120 (NE)</option>
+				<option value = "121">Stage 121 (NE)</option>
+				<option value = "122">Stage 122 (NE)</option>
+				<option value = "123">Stage 123 (NE)</option>
+				<option value = "124">Stage 124 (NE)</option>
+				<option value = "125">Stage 125 (NE)</option>
+				<option value = "126">Stage 126 (NE)</option>
+				<option value = "127">Stage 127 (NE)</option>
+				<option value = "128">Stage 128 (NE)</option>
+				<option value = "129">Stage 129 (NE)</option>
+				<option value = "130">Stage 130 (NE)</option>
+				<option value = "131">Stage 131 (NE)</option>
+				<option value = "132">Stage 132 (NE)</option>
+				<option value = "133">Stage 133 (NE)</option>
+				<option value = "134">Stage 134 (NE)</option>
+				<option value = "135">Stage 135 (NE)</option>
+				<option value = "136">Stage 136 (NE)</option>
+				<option value = "137">Stage 137 (NE)</option>
+				<option value = "138">Stage 138 (NE)</option>
+				<option value = "139">Stage 139 (NE)</option>
+				<option value = "140">Stage 140 (NE)</option>
+				<option value = "141">Stage 141 (NE)</option>
+				<option value = "142">Stage 142 (NE)</option>
+				<option value = "143">Stage 143 (NE)</option>
+				<option value = "144">Stage 144 (NE)</option>
+				<option value = "145">Stage 145 (NE)</option>
+				<option value = "146">Stage 146 (NE)</option>
+				<option value = "147">Stage 147 (NE)</option>
+				<option value = "148">Stage 148 (NE)</option>
+				<option value = "149">Stage 149 (NE)</option>
+				<option value = "150">Stage 150 (NE)</option>
+				<option value = "151">Stage 151 (NE)</option>
+				<option value = "152">Stage 152 (NE)</option>
+				<option value = "153">Stage 153 (NE)</option>
+				<option value = "154">Stage 154 (NE)</option>
+				<option value = "155">Stage 155 (NE)</option>
+				<option value = "156">Stage 156 (NE)</option>
+				<option value = "157">Stage 157 (NE)</option>
+				<option value = "158">Stage 158 (NE)</option>
+				<option value = "159">Stage 159 (NE)</option>
+				<option value = "160">Stage 160 (NE)</option>
+				<option value = "161">Stage 161 (NE)</option>
+				<option value = "162">Stage 162 (NE)</option>
+				<option value = "163">Stage 163 (NE)</option>
+				<option value = "164">Stage 164 (NE)</option>
+				<option value = "165">Stage 165 (NE)</option>
+				<option value = "166">Stage 166 (NE)</option>
+				<option value = "167">Stage 167 (NE)</option>
+				<option value = "168">Stage 168 (NE)</option>
+				<option value = "169">Stage 169 (NE)</option>
+				<option value = "170">Stage 170 (NE)</option>
+				<option value = "171">Stage 171 (NE)</option>
+				<option value = "172">Stage 172 (NE)</option>
+				<option value = "173">Stage 173 (NE)</option>
+				<option value = "174">Stage 174 (NE)</option>
+				<option value = "175">Stage 175 (NE)</option>
+				<option value = "176">Stage 176 (NE)</option>
+				<option value = "177">Stage 177 (NE)</option>
+				<option value = "178">Stage 178 (NE)</option>
+				<option value = "179">Stage 179 (NE)</option>
+				<option value = "180">Stage 180 (NE)</option>
+				<option value = "181">Stage 181 (NE)</option>
+				<option value = "182">Stage 182 (NE)</option>
+				<option value = "183">Stage 183 (NE)</option>
+				<option value = "184">Stage 184 (NE)</option>
+				<option value = "185">Stage 185 (NE)</option>
+				<option value = "186">Stage 186 (NE)</option>
+				<option value = "187">Stage 187 (NE)</option>
+				<option value = "188">Stage 188 (NE)</option>
+				<option value = "189">Stage 189 (NE)</option>
+				<option value = "190">Stage 190 (NE)</option>
+				<option value = "191">Stage 191 (NE)</option>
+				<option value = "192">Stage 192 (NE)</option>
+				<option value = "193">Stage 193 (NE)</option>
+				<option value = "194">Stage 194 (NE)</option>
+				<option value = "195">Stage 195 (NE)</option>
+				<option value = "196">Stage 196 (NE)</option>
+				<option value = "197">Stage 197 (NE)</option>
+				<option value = "198">Stage 198 (NE)</option>
+				<option value = "199">Stage 199 (NE)</option>
+				<option value = "200">Stage 200 (NE)</option>
+				<option value = "201">Stage 201 (NE)</option>
+				<option value = "202">Stage 202 (NE)</option>
+				<option value = "203">Stage 203 (NE)</option>
+				<option value = "204">Stage 204 (NE)</option>
+				<option value = "205">Stage 205 (NE)</option>
+				<option value = "206">Stage 206 (NE)</option>
+				<option value = "207">Stage 207 (NE)</option>
+				<option value = "208">Stage 208 (NE)</option>
+				<option value = "209">Stage 209 (NE)</option>
+				<option value = "210">Stage 210 (NE)</option>
+				<option value = "211">Stage 211 (NE)</option>
+				<option value = "212">Stage 212 (NE)</option>
+				<option value = "213">Stage 213 (NE)</option>
+				<option value = "214">Stage 214 (NE)</option>
+				<option value = "215">Stage 215 (NE)</option>
+				<option value = "216">Stage 216 (NE)</option>
+				<option value = "217">Stage 217 (NE)</option>
+				<option value = "218">Stage 218 (NE)</option>
+				<option value = "219">Stage 219 (NE)</option>
+				<option value = "220">Stage 220 (NE)</option>
+				<option value = "221">Stage 221 (NE)</option>
+				<option value = "222">Stage 222 (NE)</option>
+				<option value = "223">Stage 223 (NE)</option>
+				<option value = "224">Stage 224 (NE)</option>
+				<option value = "225">Stage 225 (NE)</option>
+				<option value = "226">Stage 226 (NE)</option>
+				<option value = "227">Stage 227 (NE)</option>
+				<option value = "228">Stage 228 (NE)</option>
+				<option value = "229">Stage 229 (NE)</option>
+				<option value = "230">Stage 230 (NE)</option>
+				<option value = "231">Stage 231 (NE)</option>
+				<option value = "232">Stage 232 (NE)</option>
+				<option value = "233">Stage 233 (NE)</option>
+				<option value = "234">Stage 234 (NE)</option>
+				<option value = "235">Stage 235 (NE)</option>
+				<option value = "236">Stage 236 (NE)</option>
+				<option value = "237">Stage 237 (NE)</option>
+				<option value = "238">Stage 238 (NE)</option>
+				<option value = "239">Stage 239 (NE)</option>
+				<option value = "240">Stage 240 (NE)</option>
+				<option value = "241">Stage 241 (NE)</option>
+				<option value = "242">Stage 242 (NE)</option>
+				<option value = "243">Stage 243 (NE)</option>
+				<option value = "244">Stage 244 (NE)</option>
+				<option value = "245">Stage 245 (NE)</option>
+				<option value = "246">Stage 246 (NE)</option>
+				<option value = "247">Stage 247 (NE)</option>
+				<option value = "248">Stage 248 (NE)</option>
+				<option value = "249">Stage 249 (NE)</option>
+				<option value = "250">Stage 250 (NE)</option>
+				<option value = "251">Stage 251 (NE)</option>
+				<option value = "252">Stage 252 (NE)</option>
+				<option value = "253">Stage 253 (NE)</option>
+				<option value = "254">Stage 254 (NE)</option>
+				<option value = "255">Stage 255 (NE)</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<div>Score</div>
+			<input type="text" id="eb_score"/>
+		</div>
+		<div class="form-group">
+			<div>Fire Range</div>
+			<select name="sel_fireRange_nc" id="sel_fireRange_nc">
+				<option value = "">(Select one)</option>
+				<option value = "0">0 (NE)</option>
+				<option value = "1">1</option>
+				<option value = "2">2</option>
+				<option value = "3">3</option>
+				<option value = "4">4</option>
+				<option value = "5">5</option>
+				<option value = "6">6 (NE)</option>
+				<option value = "7">7 (NE)</option>
+				<option value = "8">8 (NE)</option>
+				<option value = "9">9 (NE)</option>
+				<option value = "10">10 (NE)</option>
+				<option value = "11">11 (NE)</option>
+				<option value = "12">12 (NE)</option>
+				<option value = "13">13 (NE)</option>
+				<option value = "14">14 (NE)</option>
+				<option value = "15">15 (NE)</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<div>Number of Bombs</div>
+			<select name="sel_bombsNumber_c" id="sel_bombsNumber_c">
+				<option value = "">(Select one)</option>
+				<option value = "0">1</option>
+				<option value = "1">2</option>
+				<option value = "2">3</option>
+				<option value = "3">4</option>
+				<option value = "4">5</option>
+				<option value = "5">6</option>
+				<option value = "6">7</option>
+				<option value = "7">8</option>
+				<option value = "8">9</option>
+				<option value = "9">10</option>
+				<option value = "10">11 (NE)</option>
+				<option value = "11">12 (NE)</option>
+				<option value = "12">13 (NE)</option>
+				<option value = "13">14 (NE)</option>
+				<option value = "14">15 (NE)</option>
+				<option value = "15">16 (NE)</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<div>Detonator</div>
+			<select name="sel_flagDetonator" id="sel_flagDetonator">
+				<option value = "">(Select one)</option>
+				<option value = "0">0 - No</option>
+				<option value = "1">1 - Yes</option>
+				<option value = "2">2 - Yes (NE)</option>
+				<option value = "3">3 - Yes (NE)</option>
+				<option value = "4">4 - Yes (NE)</option>
+				<option value = "5">5 - Yes (NE)</option>
+				<option value = "6">6 - Yes (NE)</option>
+				<option value = "7">7 - Yes (NE)</option>
+				<option value = "8">8 - Yes (NE)</option>
+				<option value = "9">9 - Yes (NE)</option>
+				<option value = "10">10 - Yes (NE)</option>
+				<option value = "11">11 - Yes (NE)</option>
+				<option value = "12">12 - Yes (NE)</option>
+				<option value = "13">13 - Yes (NE)</option>
+				<option value = "14">14 - Yes (NE)</option>
+				<option value = "15">15 - Yes</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<div>Flame Immunity</div>
+			<select name="sel_flagFlammeImmunity" id="sel_flagFlammeImmunity">
+				<option value = "">(Select one)</option>
+				<option value = "0">0 - No</option>
+				<option value = "1">1 - Yes</option>
+				<option value = "2">2 - Yes (NE)</option>
+				<option value = "3">3 - Yes (NE)</option>
+				<option value = "4">4 - Yes (NE)</option>
+				<option value = "5">5 - Yes (NE)</option>
+				<option value = "6">6 - Yes (NE)</option>
+				<option value = "7">7 - Yes (NE)</option>
+				<option value = "8">8 - Yes (NE)</option>
+				<option value = "9">9 - Yes (NE)</option>
+				<option value = "10">10 - Yes (NE)</option>
+				<option value = "11">11 - Yes (NE)</option>
+				<option value = "12">12 - Yes (NE)</option>
+				<option value = "13">13 - Yes (NE)</option>
+				<option value = "14">14 - Yes (NE)</option>
+				<option value = "15">15 - Yes</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<div>Speed Up</div>
+			<select name="sel_flagSpeedUp" id="sel_flagSpeedUp">
+				<option value = "">(Select one)</option>
+				<option value = "0">0 - No</option>
+				<option value = "1">1 - Yes</option>
+				<option value = "2">2 - Yes (NE)</option>
+				<option value = "3">3 - Yes (NE)</option>
+				<option value = "4">4 - Yes (NE)</option>
+				<option value = "5">5 - Yes (NE)</option>
+				<option value = "6">6 - Yes (NE)</option>
+				<option value = "7">7 - Yes (NE)</option>
+				<option value = "8">8 - Yes (NE)</option>
+				<option value = "9">9 - Yes (NE)</option>
+				<option value = "10">10 - Yes (NE)</option>
+				<option value = "11">11 - Yes (NE)</option>
+				<option value = "12">12 - Yes (NE)</option>
+				<option value = "13">13 - Yes (NE)</option>
+				<option value = "14">14 - Yes (NE)</option>
+				<option value = "15">15 - Yes</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<div>Reveal Targets</div>
+			<select name="sel_flagRevealTargets" id="sel_flagRevealTargets" title="Reveal positions of exitway and power-up. They will be orange-colored walls.">
+				<option value = "">(Select one)</option>
+				<option value = "0">0 - No</option>
+				<option value = "1">1 - Yes</option>
+				<option value = "2">2 - Yes (NE)</option>
+				<option value = "3">3 - Yes (NE)</option>
+				<option value = "4">4 - Yes (NE)</option>
+				<option value = "5">5 - Yes (NE)</option>
+				<option value = "6">6 - Yes (NE)</option>
+				<option value = "7">7 - Yes (NE)</option>
+				<option value = "8">8 - Yes (NE)</option>
+				<option value = "9">9 - Yes (NE)</option>
+				<option value = "10">10 - Yes (NE)</option>
+				<option value = "11">11 - Yes (NE)</option>
+				<option value = "12">12 - Yes (NE)</option>
+				<option value = "13">13 - Yes (NE)</option>
+				<option value = "14">14 - Yes (NE)</option>
+				<option value = "15">15 - Yes</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<div>Wall Walking</div>
+			<select name="sel_flagWallWalking" id="sel_flagWallWalking">
+				<option value = "">(Select one)</option>
+				<option value = "0">0 - No</option>
+				<option value = "1">1 - Yes</option>
+				<option value = "2">2 - Yes (NE)</option>
+				<option value = "3">3 - Yes (NE)</option>
+				<option value = "4">4 - Yes (NE)</option>
+				<option value = "5">5 - Yes (NE)</option>
+				<option value = "6">6 - Yes (NE)</option>
+				<option value = "7">7 - Yes (NE)</option>
+				<option value = "8">8 - Yes (NE)</option>
+				<option value = "9">9 - Yes (NE)</option>
+				<option value = "10">10 - Yes (NE)</option>
+				<option value = "11">11 - Yes (NE)</option>
+				<option value = "12">12 - Yes (NE)</option>
+				<option value = "13">13 - Yes (NE)</option>
+				<option value = "14">14 - Yes (NE)</option>
+				<option value = "15">15 - Yes (NE)</option>
+			</select>
+		</div>
+  
+		<div class="form-group">
+			<div>&nbsp;</div>
+		</div>   
+		
+		<p>(NE) = Not Expected value: It's valid in the full range of value, but it is not expected by the game code, therefore it may happen some malfunction.</p>
+		
+		<p>Credits: Password algorithm described by <a href="https://bisqwit.iki.fi/">Joel Yliluoma (aka Bisqwit)</a> at <a href="https://www.youtube.com/watch?v=PPfPmP44-r8">here</a>.</p>
+	</div>
+</div>
+
+</body>
+</html>
