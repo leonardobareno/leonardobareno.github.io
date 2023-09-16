@@ -40,7 +40,7 @@ MGN2022_00_COLOMBIA.zip (https://geoportal.dane.gov.co/servicios/descarga-y-meta
 		
 <script>
 	var map = L.map('map').
-		setView([11.3563038,-72.5855473],
+		setView([11.6,-72.5855473],
 		8);
 	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: '&copy; <a href="http://www.openstreetmap.org">OpenStreetMap</a>',
@@ -59,7 +59,7 @@ MGN2022_00_COLOMBIA.zip (https://geoportal.dane.gov.co/servicios/descarga-y-meta
 	};
 
 	info.update = function (props) {
-		const contents = props ? `<b>Sector Rural ${props.SETR_CCNCT}</b><br />Sí hablan: ${getPorc(props.SETR_CCNCT)}%` : 'Colocar el puntero sobre una región';
+		const contents = props ? `<b>Sector Rural ${props.SETR_CCNCT}</b><br />Sí: ${getPorc(props.SETR_CCNCT)}%` : 'Colocar el puntero sobre una región';
 		this._div.innerHTML = `<h4>Habla lengua</h4>${contents}`;
 	};
 
