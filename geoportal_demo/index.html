@@ -1,11 +1,12 @@
 <!--
-Créditos:
+CrÃ©ditos:
 https://leafletjs.com/examples/choropleth/
 MGN2022_00_COLOMBIA.zip (https://geoportal.dane.gov.co/servicios/descarga-y-metadatos/datos-geoestadisticos/?cod=111 , consultado 2023-09-13)
 -->
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<script src="assets/leaflet/leaflet.js"></script>
 	<link rel="stylesheet" href="assets/leaflet/leaflet.css" />
 	
@@ -42,7 +43,7 @@ MGN2022_00_COLOMBIA.zip (https://geoportal.dane.gov.co/servicios/descarga-y-meta
 		setView([11.3563038,-72.5855473],
 		8);
 	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery Â© <a href="http://cloudmade.com">CloudMade</a>',
 		maxZoom: 18
 		}).addTo(map);
 	L.control.scale().addTo(map);
@@ -58,7 +59,7 @@ MGN2022_00_COLOMBIA.zip (https://geoportal.dane.gov.co/servicios/descarga-y-meta
 	};
 
 	info.update = function (props) {
-		const contents = props ? `<b>Sector Rural ${props.SETR_CCNCT}</b><br />Sí hablan: ${getPorc(props.SETR_CCNCT)}%` : 'Colocar el puntero sobre una región';
+		const contents = props ? `<b>Sector Rural ${props.SETR_CCNCT}</b><br />SÃ­ hablan: ${getPorc(props.SETR_CCNCT)}%` : 'Colocar el puntero sobre una regiÃ³n';
 		this._div.innerHTML = `<h4>Habla lengua</h4>${contents}`;
 	};
 
@@ -136,7 +137,7 @@ MGN2022_00_COLOMBIA.zip (https://geoportal.dane.gov.co/servicios/descarga-y-meta
 		});
 	}
 
-	map.attributionControl.addAttribution('Datos geoestadísticos &copy; <a href="https://geoportal.dane.gov.co/">DANE - MGN 2022</a>');
+	map.attributionControl.addAttribution('Datos geoestadÃ­sticos &copy; <a href="https://geoportal.dane.gov.co/">DANE - MGN 2022</a>');
 
 
 	const legend = L.control({position: 'bottomright'});
