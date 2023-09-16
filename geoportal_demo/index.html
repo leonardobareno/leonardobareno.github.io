@@ -1,0 +1,167 @@
+<!--
+Créditos:
+https://leafletjs.com/examples/choropleth/
+MGN2022_00_COLOMBIA.zip (https://geoportal.dane.gov.co/servicios/descarga-y-metadatos/datos-geoestadisticos/?cod=111 , consultado 2023-09-13)
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="assets/leaflet/leaflet.js"></script>
+	<link rel="stylesheet" href="assets/leaflet/leaflet.css" />
+	
+	<style>
+// #map { 
+//    width: 100%;
+//    height: 580px;
+//    box-shadow: 5px 5px 5px #888;
+// }
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		.leaflet-container {
+			height: 400px;
+			width: 600px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+	</style>
+	
+	<style>#map { width: 800px; height: 500px; }
+.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }</style>
+	
+</head>
+<body>
+<div id="map">
+<script type="text/javascript" src="assets/json/laguajira_lengua.js"></script>
+</div>
+		
+<script>
+	var map = L.map('map').
+		setView([11.3563038,-72.5855473],
+		8);
+	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+		maxZoom: 18
+		}).addTo(map);
+	L.control.scale().addTo(map);
+	L.marker([41.66, -4.71],{draggable: true}).addTo(map);
+
+	// control that shows state info on hover
+	const info = L.control();
+
+	info.onAdd = function (map) {
+		this._div = L.DomUtil.create('div', 'info');
+		this.update();
+		return this._div;
+	};
+
+	info.update = function (props) {
+		const contents = props ? `<b>Sector Rural ${props.SETR_CCNCT}</b><br />Sí hablan: ${getPorc(props.SETR_CCNCT)}%` : 'Colocar el puntero sobre una región';
+		this._div.innerHTML = `<h4>Habla lengua</h4>${contents}`;
+	};
+
+	info.addTo(map);
+
+	
+	function getColor(d) {
+		return d > 87.5 ? '#800026' :
+			d > 75.0    ? '#BD0026' :
+			d > 62.5    ? '#E31A1C' :
+			d > 50.0    ? '#FC4E2A' :
+			d > 37.5    ? '#FD8D3C' :
+			d > 25.0    ? '#FEB24C' :
+			d > 12.5    ? '#FED976' : '#FFEDA0';
+	}
+
+	function getFeature(f) {
+		return f.properties.SETR_CCNCT;
+	}
+	
+	function getPorc(setr) {
+		var ll_inst = laguajira_lengua.find(inst => inst.grupo === setr);
+		return (ll_inst == undefined) ? 0.0 : ll_inst.porc;
+	}
+			
+	function style(feature) {
+		return {
+			weight: 0.5,
+			opacity: 1,
+			color: 'white',
+			/*dashArray: '3',*/
+			fillOpacity: 0.7,
+			fillColor: getColor(getPorc(feature.properties.SETR_CCNCT))
+		};
+	}
+	
+	function highlightFeature(e) {
+		const layer = e.target;
+
+		layer.setStyle({
+			weight: 1,
+			color: '#000',
+			dashArray: '',
+			fillOpacity: 0.7
+		});
+
+		layer.bringToFront();
+
+		info.update(layer.feature.properties);
+	}
+	
+	L.geoJson().addTo(map);
+	
+	var geojson;
+	 
+	fetch("assets/json/laguajira_rural_0_250k.geojson").then(res => res.json()).then(data => {
+	  // add GeoJSON layer to the map once the file is loaded
+	  geojson = L.geoJson(data, {style,onEachFeature}).addTo(map);
+	});
+	
+	function resetHighlight(e) {
+		geojson.resetStyle(e.target);
+		info.update();
+	}
+
+	function zoomToFeature(e) {
+		map.fitBounds(e.target.getBounds());
+	}
+
+	function onEachFeature(feature, layer) {
+		layer.on({
+			mouseover: highlightFeature,
+			mouseout: resetHighlight,
+			click: zoomToFeature
+		});
+	}
+
+	map.attributionControl.addAttribution('Datos geoestadísticos &copy; <a href="https://geoportal.dane.gov.co/">DANE - MGN 2022</a>');
+
+
+	const legend = L.control({position: 'bottomright'});
+
+	legend.onAdd = function (map) {
+
+		const div = L.DomUtil.create('div', 'info legend');
+		const grades = ["&nbsp;&nbsp;0.0", "12.5", "25.0", "37.5", "50.0", "62.5", "75.0", "87.5", "100.0"];
+		const labels = [];
+		let from, to;
+
+		for (let i = 0; i < (grades.length - 1); i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(`<i style="background:${getColor(from + 1)}"></i> ${from}% &ndash; ${to}%`);
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+
+	legend.addTo(map);
+	
+</script>
+	
+</body>
+</html>
