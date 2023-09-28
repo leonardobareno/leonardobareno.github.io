@@ -80,6 +80,15 @@ MGN2022_00_COLOMBIA.zip (https://geoportal.dane.gov.co/servicios/descarga-y-meta
 		"Saneamiento" : layer_i09_porc_sin_sanea,
 		"Electricidad" : layer_i10_porc_sin_electr,
 	};
+	
+	const mvp = L.layerGroup();
+	for (let i = 0; i < laguajira_mv.length; i++) {
+		L.marker([laguajira_mv[i].lat, laguajira_mv[i].long]).bindPopup(laguajira_mv[i].nombre).addTo(mvp);
+	}
+	
+	const overlays = {
+		'MV': mvp
+	};
 
 	var map = L.map('map',{zoomControl: false})
 				.setView([11.6,-72.5855473],8);
@@ -267,7 +276,7 @@ MGN2022_00_COLOMBIA.zip (https://geoportal.dane.gov.co/servicios/descarga-y-meta
 
 	legend.addTo(map);
 	
-	const layerControl = L.control.layers(baseLayers, {}, {collapsed: false, position: 'topleft'}).addTo(map);
+	const layerControl = L.control.layers(baseLayers, overlays, {collapsed: false, position: 'topleft'}).addTo(map);
 	layer_i03_porc_habla_lengua.addTo(map);
 	
 	map.on('baselayerchange', function (e) {

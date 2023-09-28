@@ -518,3 +518,9 @@ var laguajira_data = [
 {"grupo":"44847203605035000101","pers_total":380,"i03_porc_habla_lengua":94.62,"i04_porc_hacin":70.00,"i06_porc_desecho_sinpared":2.37,"i07_porc_pisos_tierra":65.00,"i09_porc_sin_sanea":97.37,"i10_porc_sin_electr":100.00},
 {"grupo":"44847203605036000101","pers_total":89,"i03_porc_habla_lengua":98.88,"i04_porc_hacin":67.42,"i06_porc_desecho_sinpared":0.00,"i07_porc_pisos_tierra":47.19,"i09_porc_sin_sanea":97.75,"i10_porc_sin_electr":100.00}
 ];
+
+var laguajira_mv = [
+{"lat":11.6905945,"long":-72.8603048,"nombre":"P1"},
+{"lat":11.9163958,"long":-72.4148693,"nombre":"P2"},
+{"lat":12.2441719,"long":-72.2846274,"nombre":"P3"},
+];
