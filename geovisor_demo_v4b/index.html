@@ -1,0 +1,305 @@
+<!--
+Prototipo Geovisor
+Leonardo Bareño
+2023-10-03
+
+Créditos:
+https://leafletjs.com/examples/choropleth/
+https://leafletjs.com/examples/layers-control/
+https://leafletjs.com/examples/wms/wms.html
+https://github.com/teastman/Leaflet.pattern
+MGN2022_00_COLOMBIA.zip (https://geoportal.dane.gov.co/servicios/descarga-y-metadatos/datos-geoestadisticos/?cod=111 , consultado 2023-09-13)
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="assets/leaflet/leaflet.js"></script>
+	<script src="assets/leaflet/leaflet.pattern.js"></script>
+	<!--link rel="icon" type="image/png" href="assets/img/favicon.png"-->
+	<link rel="stylesheet" href="assets/leaflet/leaflet.css" />
+	
+	<style>
+// #map { 
+//    width: 100%;
+//    height: 580px;
+//    box-shadow: 5px 5px 5px #888;
+// }
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		.leaflet-container {
+			height: 400px;
+			width: 600px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+	</style>
+	
+	<style>#map { width: 800px; height: 500px; }
+.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }</style>
+	
+</head>
+<body>
+<div id="map">
+<script type="text/javascript" src="assets/json/laguajira_data.js"></script>
+</div>
+		
+<script>
+	const layer_i03_porc_habla_lengua = L.layerGroup();
+	layer_i03_porc_habla_lengua.nombre = 'i03_porc_habla_lengua';
+	const layer_i04_porc_hacin = L.layerGroup();
+	layer_i04_porc_hacin.nombre = 'i04_porc_hacin';
+	const layer_i06_porc_desecho_sinpared = L.layerGroup();
+	layer_i06_porc_desecho_sinpared.nombre = 'i06_porc_desecho_sinpared';
+	const layer_i07_porc_pisos_tierra = L.layerGroup();
+	layer_i07_porc_pisos_tierra.nombre = 'i07_porc_pisos_tierra';
+	const layer_i09_porc_sin_sanea = L.layerGroup();
+	layer_i09_porc_sin_sanea.nombre = 'i09_porc_sin_sanea';
+	const layer_i10_porc_sin_electr = L.layerGroup();
+	layer_i10_porc_sin_electr.nombre = 'i10_porc_sin_electr';
+	
+	const capas = {
+		"i03_porc_habla_lengua" : ['Habla Lengua', layer_i03_porc_habla_lengua, 'Sí'],
+		"i04_porc_hacin" : ['Hacinamiento', layer_i04_porc_hacin, 'Personas en hacinamiento'],
+		"i06_porc_desecho_sinpared" : ['Paredes', layer_i06_porc_desecho_sinpared, 'Desecho o Sin Paredes'],
+		"i07_porc_pisos_tierra" : ['Pisos', layer_i07_porc_pisos_tierra, 'Pisos en tierra'],
+		"i09_porc_sin_sanea" : ['Saneamiento', layer_i09_porc_sin_sanea, 'Sin saneamiento'],
+		"i10_porc_sin_electr" : ['Electricidad', layer_i10_porc_sin_electr, 'Sin electricidad'],
+	};
+	
+	var capa_actual = 'i03_porc_habla_lengua';
+	
+	const baseLayers = {
+		"Habla Lengua" : layer_i03_porc_habla_lengua,
+		"Hacinamiento" : layer_i04_porc_hacin,
+		"Paredes" : layer_i06_porc_desecho_sinpared,
+		"Pisos" : layer_i07_porc_pisos_tierra,
+		"Saneamiento" : layer_i09_porc_sin_sanea,
+		"Electricidad" : layer_i10_porc_sin_electr,
+	};
+	
+	const mvp = L.layerGroup();
+	for (let i = 0; i < laguajira_mv.length; i++) {
+		L.marker([laguajira_mv[i].lat, laguajira_mv[i].long]).bindPopup(laguajira_mv[i].nombre).addTo(mvp);
+	}
+	
+	const overlays = {
+		'MV': mvp
+	};
+
+	var map = L.map('map',{zoomControl: false})
+				.setView([11.6,-72.5855473],8);
+	L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attribution">CARTO</a>',
+		maxZoom: 18
+		}).addTo(map);
+	L.control.zoom({
+		position: 'bottomleft'
+	}).addTo(map);
+	/*L.control.scale().addTo(map);*/
+	/*L.marker([41.66, -4.71],{draggable: true}).addTo(map);*/
+
+	// control that shows state info on hover
+	const info = L.control();
+
+	info.onAdd = function (map) {
+		this._div = L.DomUtil.create('div', 'info');
+		this.update();
+		return this._div;
+	};
+
+	info.update = function (props) {
+		const contents = props ? `<b>${getMunNombre(props)} - ${getSectorNombre(props)}</b><br />` + (getPorc(props) === null ? '(Sin información)' : `${capas[capa_actual][2]}: ${getPorc(props)}%`) : 'Seleccionar indicador y colocar el puntero sobre una región';
+		this._div.innerHTML = `<h4>${capas[capa_actual][0]}</h4>${contents}`;
+	};
+
+	info.addTo(map);
+	
+	var stripes = new L.StripePattern({
+		height: 4,
+		weight: 1,
+		spaceWeight: 3,
+		angle: 45
+	});
+	stripes.addTo(map);
+	
+	function getColor(d) {
+		return d === null ? '#00000000' :
+			d > 87.5 ? '#800026' :
+			d > 75.0    ? '#BD0026' :
+			d > 62.5    ? '#E31A1C' :
+			d > 50.0    ? '#FC4E2A' :
+			d > 37.5    ? '#FD8D3C' :
+			d > 25.0    ? '#FEB24C' :
+			d > 12.5    ? '#FED976' : '#FFEDA0';
+	}
+	
+	function getSetr(properties) {
+		var setr = properties.SECR_CCNCT + "000000000";//Sección rural: 11 dígitos + 9 ceros
+		if (properties.SECR_CCNCT == undefined) {
+			setr = properties.COD_SECC;//Sección urbana: 20 digitos
+		}
+		return setr;
+	}
+	
+	function getPorc(properties) {
+		var setr = getSetr(properties);
+		var ll_inst = laguajira_data.find(inst => inst.grupo === getSetr(properties));
+		var sal = null;
+		if (ll_inst != undefined) {
+			sal = ll_inst[capa_actual];
+		}		
+		return sal;
+	}
+	
+	function getMunNombre(properties) {
+		var ll_inst = laguajira_municipios.find(inst => inst.cod_mun === getSetr(properties).substring(0, 5));
+		var sal = "N/A";
+		if (ll_inst != undefined) {
+			sal = ll_inst.nombre_mun;
+		}		
+		return sal;
+	}
+	
+	function getSectorNombre(properties) {
+		var setr = getSetr(properties);
+		var digito = setr.substring(5,6);
+		var sal = "N/A";
+		if (digito === "3") {
+			sal = "Sección Rural " + setr;
+		}
+		else {
+			var setr_cp = "SETR_CP_NA";
+			if (digito === "1") {
+				setr_cp = setr.substring(0,5) + setr.substring(6,9);
+			}
+			else if (digito === "2") {
+				setr_cp = properties.COD_CPOB;
+			}
+			
+			var ll_inst = laguajira_centrospoblados.find(inst => inst.cod_cp === setr_cp);
+			if (ll_inst != undefined) {
+				sal = ll_inst.nombre_cp + " (" + setr + ")";
+			}		
+		}
+		return sal;
+	}
+	
+	function style(feature) {
+		var porc_inst = getPorc(feature.properties)
+		return {
+			weight: 0.5,
+			opacity: 1,
+			color: 'white',
+			/*dashArray: '3',*/
+			fillOpacity: 0.7,
+			fillColor: getColor(porc_inst),
+			fillPattern: porc_inst === null ? stripes : null
+		};
+	}
+	
+	function highlightFeature(e) {
+		const layer = e.target;
+
+		layer.setStyle({
+			weight: 1,
+			color: '#000',
+			dashArray: '',
+			fillOpacity: 0.7
+		});
+
+		layer.bringToFront();
+		geojson_urbano.bringToFront();
+		geojson_mpio.bringToFront();
+
+		info.update(layer.feature.properties);
+	}
+	
+	L.geoJson().addTo(map);
+	
+	var geojson_rural;
+	var geojson_urbano;
+	var geojson_mpio;
+	 
+	fetch("assets/json/laguajira_seccion_rural_0_100k_sel_ru.geojson").then(res => res.json()).then(data => {
+	  // add GeoJSON layer to the map once the file is loaded
+	  geojson_rural = L.geoJson(data, {style: style,onEachFeature}).addTo(map);
+	  
+		fetch("assets/json/laguajira_seccion_urbana_50k_100k.geojson").then(res => res.json()).then(data => {
+		  // add GeoJSON layer to the map once the file is loaded
+		  geojson_urbano = L.geoJson(data, {style: style, onEachFeature}).addTo(map);
+		  
+			fetch("assets/json/laguajira_mgn_mpio_politico.geojson").then(res => res.json()).then(data => {
+			  // add GeoJSON layer to the map once the file is loaded
+			  geojson_mpio = L.geoJson(data, {style: {weight: 2, color: '#404040', dashArray: '', fillOpacity: 1.0, fillColor: '#00000000'}, interactive: false}).addTo(map);
+			});
+		  
+		});
+	  
+	});
+	 
+	
+	
+	function resetHighlight(e) {
+		const layer = e.target;
+		layer.setStyle(style(layer.feature));
+		info.update();
+	}
+
+	function zoomToFeature(e) {
+		map.fitBounds(e.target.getBounds());
+	}
+
+	function onEachFeature(feature, layer) {
+		layer.on({
+			mouseover: highlightFeature,
+			mouseout: resetHighlight,
+			click: zoomToFeature
+		});
+	}
+
+	map.attributionControl.addAttribution('Datos geoestadísticos &copy; <a href="https://geoportal.dane.gov.co/">DANE - MGN 2022</a>');
+
+
+	const legend = L.control({position: 'bottomright'});
+
+	legend.onAdd = function (map) {
+
+		const div = L.DomUtil.create('div', 'info legend');
+		const grades = ["&nbsp;&nbsp;0.0", "12.5", "25.0", "37.5", "50.0", "62.5", "75.0", "87.5", "100.0"];
+		const labels = [];
+		let from, to;
+
+		for (let i = 0; i < (grades.length - 1); i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(`<i style="background:${getColor(from + 1)}"></i> ${from}% &ndash; ${to}%`);
+		}
+		
+		labels.push(`<i><img src="assets/img/rayas.svg" height="18px" width="18px"></img></i> Sin información`)
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+
+	legend.addTo(map);
+	
+	const layerControl = L.control.layers(baseLayers, overlays, {collapsed: false, position: 'topleft'}).addTo(map);
+	layer_i03_porc_habla_lengua.addTo(map);
+	
+	map.on('baselayerchange', function (e) {
+	   currentLayerID = e.layer._leaflet_id;
+	   capa_actual = this._layers[currentLayerID].nombre;
+	   geojson_rural.resetStyle();
+	   geojson_urbano.resetStyle();
+	   info.update();
+	});	
+	
+</script>
+	
+</body>
+</html>
