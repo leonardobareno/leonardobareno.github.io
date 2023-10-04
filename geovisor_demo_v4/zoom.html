@@ -1,0 +1,136 @@
+<!--
+Prueba Zoom
+Leonardo Bareño
+2023-10-04
+
+Créditos:
+https://leafletjs.com/examples/zoom-levels/example-delta.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<base target="_top">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>Prueba Zoom</title>
+	
+	<script src="assets/leaflet/leaflet.js"></script>
+	<script src="assets/leaflet/leaflet.pattern.js"></script>
+	<!--link rel="icon" type="image/png" href="assets/img/favicon.png"-->
+	<link rel="stylesheet" href="assets/leaflet/leaflet.css" />
+
+	<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		.leaflet-container {
+			height: 500px;
+			width: 800px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+	</style>
+
+	
+</head>
+<body>
+
+<div id='map'></div>
+
+<script>
+
+	const map = L.map('map', {
+		minZoom: 0,
+		maxZoom: 18,
+		zoomSnap: 0,
+		zoomDelta: 0.25
+	}).setView([11.6,-72.5855473],8);
+
+	const positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attribution">CARTO</a>'
+	}).addTo(map);
+
+	var geojson_seccion_urbana;
+	fetch("assets/json/laguajira_seccion_urbana_50k_100k.geojson").then(res => res.json()).then(data => {
+	  // add GeoJSON layer to the map once the file is loaded
+	  geojson_seccion_urbana = L.geoJson(data);
+	});
+
+	var geojson_seccion_rural;
+	fetch("assets/json/laguajira_seccion_rural_0_100k_sel_ru.geojson").then(res => res.json()).then(data => {
+	  // add GeoJSON layer to the map once the file is loaded
+	  geojson_seccion_rural = L.geoJson(data);
+	});
+	
+	var geojson_sector_rural;
+	fetch("assets/json/laguajira_sector_rural_0_250k.geojson").then(res => res.json()).then(data => {
+	  // add GeoJSON layer to the map once the file is loaded
+	  geojson_sector_rural = L.geoJson(data);
+	});
+	
+	var geojson_mpio;
+	fetch("assets/json/laguajira_mgn_mpio_politico.geojson").then(res => res.json()).then(data => {
+	  // add GeoJSON layer to the map once the file is loaded
+	  geojson_mpio = L.geoJson(data).addTo(map);
+	});
+			
+	map.on('zoomend', function() {
+		var nivel = map.getZoom();
+		
+		if (geojson_mpio != undefined) {
+			if (nivel < 9.5) {
+				map.addLayer(geojson_mpio);
+			}
+			else {
+				map.removeLayer(geojson_mpio);
+			}
+		}
+		
+		if (geojson_sector_rural != undefined) {
+			if (nivel >= 9.5 && nivel < 11.5) {
+				map.addLayer(geojson_sector_rural);
+			}
+			else {
+				map.removeLayer(geojson_sector_rural);
+			}
+		}
+		
+		if (geojson_seccion_rural != undefined && geojson_seccion_urbana != undefined) {
+			if (nivel >= 11.5) {
+				map.addLayer(geojson_seccion_rural);
+				map.addLayer(geojson_seccion_urbana);
+			}
+			else {
+				map.removeLayer(geojson_seccion_rural);
+				map.removeLayer(geojson_seccion_urbana);
+			}
+		}
+		
+	});
+	
+	const ZoomViewer = L.Control.extend({
+		onAdd() {
+			const container = L.DomUtil.create('div');
+			const gauge = L.DomUtil.create('div');
+			container.style.width = '200px';
+			container.style.background = 'rgba(255,255,255,0.5)';
+			container.style.textAlign = 'left';
+			map.on('zoomstart zoom zoomend', (ev) => {
+				gauge.innerHTML = `Zoom level: ${map.getZoom()}`;
+			});
+			container.appendChild(gauge);
+			return container;
+		}
+	});
+	
+	map.attributionControl.addAttribution('&copy; <a href="https://geoportal.dane.gov.co/">DANE - MGN 2022</a>');
+
+	const zoomViewerControl = (new ZoomViewer()).addTo(map);
+</script>
+
+
+
+</body>
+</html>
