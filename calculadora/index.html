@@ -839,7 +839,22 @@ const serie_ipc = [
 {ym: '2022-12', v: 126.03},
 {ym: '2023-01', v: 128.27},
 {ym: '2023-02', v: 130.4},
-{ym: '2023-03', v: 131.77}
+{ym: '2023-03', v: 131.77},
+{ym: '2023-04', v: 132.8},
+{ym: '2023-05', v: 133.38},
+{ym: '2023-06', v: 133.78},
+{ym: '2023-07', v: 134.45},
+{ym: '2023-08', v: 135.39},
+{ym: '2023-09', v: 136.11},
+{ym: '2023-10', v: 136.45},
+{ym: '2023-11', v: 137.09},
+{ym: '2023-12', v: 137.72},
+{ym: '2024-01', v: 138.98},
+{ym: '2024-02', v: 140.49},
+{ym: '2024-03', v: 141.48},
+{ym: '2024-04', v: 142.32},
+{ym: '2024-05', v: 142.92},
+{ym: '2024-06', v: 143.38}
 ];
 
 function valor_ipc() {
@@ -915,6 +930,9 @@ function formato(resul_val) {
 		 <div>Calcule el poder adquisitivo del ingreso, o valor de un año a otro considerando la inflación.</div>
 	  </div>   
 	  <div class="form-group">
+		 <div>(Fuente de datos: <a href="https://www.banrep.gov.co/es/estadisticas/indice-precios-consumidor-ipc">Series IPC total nacional e inflación, Banco de la República</a>)</div>
+	  </div>   
+	  <div class="form-group">
 		 <div>&nbsp;</div>
 	  </div>   
 	  <div class="form-group">
@@ -952,7 +970,7 @@ function formato(resul_val) {
 	  $(function () {
 		  $('#datetimepicker_ini').datetimepicker({
 			  minDate: "7/1/1954",
-			  maxDate: "3/1/2023",
+			  maxDate: "6/1/2024",
 			  locale: 'es',
 			  viewMode: 'years',
 			  defaultDate: "1/1/1980",
@@ -962,10 +980,10 @@ function formato(resul_val) {
 	  $(function () {
 		  $('#datetimepicker_fin').datetimepicker({
 			  minDate: "7/1/1954",
-			  maxDate: "3/1/2023",
+			  maxDate: "6/1/2024",
 			  locale: 'es',
 			  viewMode: 'years',
-			  defaultDate: "3/1/2023",
+			  defaultDate: "6/1/2024",
 			  format: 'YYYY-MM'
 		  });
 	  });
